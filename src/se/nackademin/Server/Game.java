@@ -31,6 +31,8 @@ public class Game {
                 System.out.println(playerServer.score);
 
             }
+            //todo använd bool answered ist för count
+            playerServer.hasAnswered = true;
             System.out.println("antal svarat:"+answered);
 
             if (loops == (MainServer.questionsPerRound*MainServer.playersPerGame)) {
@@ -45,7 +47,7 @@ public class Game {
              else if
                 (answered % playerServerList.size() == 0) {
                 questionCount++;
-                resetList();
+                //resetList();
                 //System.out.println("\tquestion count " + questionCount);
                 currentQuestion = qdb.questionList.get(questionCount);
                 sendToPlayers(currentQuestion);
@@ -108,6 +110,23 @@ public class Game {
         System.out.println(playerServerList.size());
         for(PlayerServer player: playerServerList) {
             player.sendToClient(toClient);
+        }
+    }
+
+    public synchronized boolean hasAllAnswered() {
+        int count = 0;
+        for(PlayerServer p: playerServerList) {
+            if(p.hasAnswered == true)
+                count ++;
+        }
+        if (count == MainServer.playersPerGame)
+            return true;
+        else
+            return false;
+    }
+    public synchronized void setAllAnswered(boolean bool) {
+        for(PlayerServer p: playerServerList) {
+            p.hasAnswered = bool;
         }
     }
 }

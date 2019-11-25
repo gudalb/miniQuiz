@@ -1,24 +1,44 @@
 package se.nackademin.Server;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+
 import se.nackademin.Shared.*;
 
 public class MainServer implements Runnable {
 
-    static int playersPerGame = 2;
-    static int questionsPerRound = 2;
-    static int rounds = 2;
+
+    static int playersPerGame = 1;
+    static int questionsPerRound = 1;
+    static int rounds = 1;
     static int port = 54321;
 
     public MainServer() {
         new Thread(this).start();
     }
 
+
     @Override
     public void run() {
+        try  {
+            InputStream propInp = new FileInputStream("config.properties");
+            Properties prop = new Properties();
+            prop.load(propInp);
+            playersPerGame = Integer.parseInt(prop.getProperty("players_per_game"));
+            rounds = Integer.parseInt(prop.getProperty("num_rounds"));
+            questionsPerRound = Integer.parseInt(prop.getProperty("questions_per_round"));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } ;
+
+
+
         while(true) {
             try {
                 ServerSocket listen = new ServerSocket(port);

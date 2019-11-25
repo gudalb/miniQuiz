@@ -11,6 +11,7 @@ public class PlayerServer implements Runnable {
     String playerName;
     ObjectOutputStream toClient;
     public int score;
+    boolean hasAnswered = false;
 
     public PlayerServer (Socket clientSocket, Game game, String playerName) throws IOException {
         this.clientSocket = clientSocket;
